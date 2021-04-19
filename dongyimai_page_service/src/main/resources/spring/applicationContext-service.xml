@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <!--dubbo服务提供者对外暴露的端口号-->
+<!--    <dubbo:protocol name="dubbo" port="20885"></dubbo:protocol>-->
+    <!--配置服务名称-->
+<!--    <dubbo:application name="dongyimai_page_service"/>-->
+    <!--配置注册中心地址-->
+<!--    <dubbo:registry address="zookeeper://192.168.188.128:2181"/>-->
+    <!--配置扫描服务所在的包-->
+  <!--  <dubbo:annotation package="com.offcn.page.service"/>-->
+
+    <!--声明free marker的配置对象-->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer" id="freeMarkerConfigurer">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="templateLoaderPath" value="/WEB-INF/ftl"/>
+     </bean>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</beans>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:scan="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <scan:component-scan base-package="com.offcn"/>
+
+    <!--    1.创建一个真正的连接过程,由JMS的供应商提供-->
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="activeMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.188.128:61616"/>
+    </bean>
+    <!--    2.创建一个用Spring管理连接的连接工厂-->
+    <bean class="org.springframework.jms.connection.SingleConnectionFactory" id="singleConnectionFactory">
+        <property name="targetConnectionFactory" ref="activeMQConnectionFactory"/>
+    </bean>
+    <!--    3.创建一个模板对象-->
+    <bean class="org.springframework.jms.core.JmsTemplate" id="jmsTemplate">
+        <property name="connectionFactory" ref="singleConnectionFactory"/>
+    </bean>
+    <!--    声明一个点对点模式的消息队列-->
+    <bean class="org.apache.activemq.command.ActiveMQQueue" id="queueMailDestination">
+        <constructor-arg value="dongyimai_mail_queue"/>
+    </bean>
+    <!--    声明一个消费者的监听容器-->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="singleConnectionFactory"/>
+        <property name="destination" ref="queueMailDestination"/>
+        <!-- 自定义监听器 -->
+        <property name="messageListener" ref="mailMessageListener"/>
+    </bean>
+
+    <!--创建java-mail发送邮件对象-->
+    <bean class="org.springframework.mail.javamail.JavaMailSenderImpl" id="javaMailSender">
+        <!--配置发送邮件的服务器-->
+        <property name="host" value="smtp.126.com"/>
+        <!--配置发送邮件的用户名-->
+        <property name="username" value="muhaoqingfeng@126.com"/>
+        <!--配置发送邮件的授权密码-->
+        <property name="password" value="DNJNDOVGFGCALANY"/>
+        <!--配置字符集编码-->
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- 邮箱服务器属性设置 -->
+        <property name="javaMailProperties">
+            <props>
+                <!-- 邮箱服务器是否支持验证 -->
+                <prop key="mail.smtp.auth">true</prop>
+                <!-- 邮箱服务器连接超时时间  毫秒-->
+                <prop key="mail.smtp.timeout">300000</prop>
+            </props>
+        </property>
+
+    </bean>
+</beans>

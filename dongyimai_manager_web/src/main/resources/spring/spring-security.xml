@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+    <!--不做安全认证的配置-->
+    <security:http pattern="/favicon.ico" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/login.html" security="none"/>
+
+    <!--需要做安全认证的-->
+    <security:http use-expressions="false" ><!--use-expressions="false" 表示不使用Spring的表达式-->
+        <!--需要登录验证和权限验证的内容-->
+        <!--/**  根目录的目录与子目录所有的资源-->
+        <!--access="ROLE_USER" 自定义权限  注意一定要以ROLE_ 开始-->
+        <security:intercept-url pattern="/**" access="ROLE_ADMIN"/>
+        <!--通过form表达登录-->
+        <!--login-page  自定义登录页面路径-->
+        <!--default-target-url 每次登录成功后,都到达指定界面-->
+        <!--always-use-default-target="true"   认证失败后跳转的界面-->
+        <security:form-login login-page="/login.html" default-target-url="/admin/index.html"
+                             always-use-default-target="true" authentication-failure-url="/login.html"/>
+        <!--默认CSRF,防护开启状态-->
+        <!--开发环境,设置为关闭-->
+        <security:csrf disabled="true"/>
+        <!--如果页面使用的是frameset框架-->
+        <security:headers>
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+        <!-- 配置注销操作 -->
+        <security:logout/>
+    </security:http>
+    <!--配置安全认证管理器-->
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <!--配置用户名和密码,以及该用户的权限-->
+            <security:user-service>
+                <security:user name="admin" password="123456" authorities="ROLE_ADMIN"/>
+                <security:user name="lhq" password="111111" authorities="ROLE_ADMIN"/>
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+
+
+</beans>

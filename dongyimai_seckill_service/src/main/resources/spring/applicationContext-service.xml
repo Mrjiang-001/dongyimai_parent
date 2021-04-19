@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:scan="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <scan:component-scan base-package="com.offcn"/>
+    <!--dubbo服务提供者对外暴露的端口号-->
+    <dubbo:protocol name="dubbo" port="20891"></dubbo:protocol>
+    <!--配置服务名称-->
+    <dubbo:application name="dongyimai_seckill_service"/>
+    <!--配置注册中心地址-->
+    <dubbo:registry address="zookeeper://192.168.188.128:2181"/>
+    <!--配置扫描服务所在的包-->
+    <dubbo:annotation package="com.offcn.seckill.service"/>
+
+    <!--声明分布式ID生成器-->
+    <bean class="com.offcn.utils.IdWorker" id="idWorker">
+        <!--工作机器ID-->
+        <constructor-arg index="0" value="3"/>
+        <!--序列号(进程ID)-->
+        <constructor-arg index="1" value="3"/>
+    </bean>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</beans>
